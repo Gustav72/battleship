@@ -1,18 +1,14 @@
-const Ship = () => {
+export const Ship = (name, length) => {
 
+    const getName = () => name;
     const getLength = () => length;
-
-    const numHits = () => hits;
-
-    const life = () => true;
-
+    let numHits = () => damage = 0;
     const hit = () => {
-        hits++;
+        damage++;
     }
-    const isSunk = () => {
-        if(hits == length) {
-            life = false;
-        }
+    let isSunk = () => {
+        if(damage == length) return true;
+        else return false;
     }
-
-}
+    return {getName, getLength, numHits, hit, isSunk}
+};
