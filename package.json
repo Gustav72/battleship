@@ -1,0 +1,23 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "Develop game with Jest using test driven development",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gustav72/battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gustav72/battleship/issues"
+  },
+  "homepage": "https://github.com/Gustav72/battleship#readme",
+  "devDependencies": {
+    "jest": "^29.4.1"
+  }
+}
