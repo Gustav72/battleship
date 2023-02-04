@@ -1,16 +1,16 @@
-export const Ship = (name, length) => {
-
+const Ship = (name, length) => {
+    let damage = 0;
     const getName = () => name;
     const getLength = () => length;
-    let numHits = () => damage = 0;
+    const numHits = () => damage;
     const hit = () => {
         damage++;
     }
-    let isSunk = () => {
+    const isSunk = () => {
         if(damage == length) return true;
         else return false;
     }
     return {getName, getLength, numHits, hit, isSunk}
 };
 
-const cruiser = Ship('cruiser', 3);
+module.exports = Ship;
