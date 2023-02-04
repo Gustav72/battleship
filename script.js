@@ -12,3 +12,5 @@ export const Ship = (name, length) => {
     }
     return {getName, getLength, numHits, hit, isSunk}
 };
+
+const cruiser = Ship('cruiser', 3);

@@ -4,7 +4,7 @@
   "description": "Develop game with Jest using test driven development",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
