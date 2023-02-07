@@ -1,12 +1,16 @@
-const Player = require('./script');
-const ComputerPlayer = require('./script')
-const Gameboard = require('./script');
-const Ship = require('./script');
+const myMethods = require('./script')
+
+const Ship = myMethods.Ship;
+const Gameboard = myMethods.Gameboard;
+const Player = myMethods.Player;
+const ComputerPlayer = myMethods.ComputerPlayer;
 
 describe('Ship', () => {
 
+  let cruiser;
+
   beforeEach(() => {
-    const cruiser = Ship('cruiser', 3);
+    cruiser = Ship('cruiser', 3);
   });
 
   test('properly adds length to ships', () => {
@@ -37,9 +41,11 @@ describe('Ship', () => {
 
 
   test('recieveAttack function delivers hit to ship', () => {
-      
-      
-      expect(cruiser.numHits()).toBe(1)
+      cruiser.hit();
+      cruiser.hit();
+      cruiser.hit();
+
+      expect(cruiser.numHits()).toBe(3)
   })
 });
 
