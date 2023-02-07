@@ -13,8 +13,6 @@ const Ship = (name, length) => {
     return {getName, getLength, numHits, hit, isSunk}
 };
 
-module.exports = Ship;
-
 const Gameboard = () => {
     let board = [];
     let ships = [];
@@ -27,7 +25,7 @@ const Gameboard = () => {
       }
     }
   
-    function placeShip(ship, x, y, orientation) {
+    const placeShip = (ship, x, y, orientation) => {
       let placed = false;
   
       if (orientation === 'horizontal') {
@@ -63,7 +61,7 @@ const Gameboard = () => {
       return placed;
     }
   
-    function receiveAttack(x, y) {
+    const receiveAttack = (x, y) => {
       if (board[y][x] === 1) {
         for (let i = 0; i < ships.length; i++) {
           let ship = ships[i];
@@ -79,7 +77,7 @@ const Gameboard = () => {
       }
     }
   
-    function allSunk() {
+    const allSunk = () => {
       for (let i = 0; i < ships.length; i++) {
         if (!ships[i].isSunk()) {
           return false;
@@ -99,24 +97,21 @@ const Gameboard = () => {
       displayMissed,
     };
   }
-  
-
-module.exports = Gameboard;
 
 const Player = (gameboard) => {
     let myTurn = false;
     
-    function attack(x, y) {
+    const attack = (x, y) => {
       if (!myTurn) return 'Not your turn';
       myTurn = false;
       return gameboard.receiveAttack(x, y);
     }
     
-    function endTurn() {
+    const endTurn = () => {
       myTurn = true;
     }
     
-    function isTurn() {
+    const isTurn = () => {
       return myTurn;
     }
     
@@ -126,14 +121,12 @@ const Player = (gameboard) => {
       isTurn,
     };
   }
-  
-  module.exports = Player;
 
   const ComputerPlayer = (gameboard) => {
     let previousMoves = [];
     let myTurn = false;
   
-    function attack() {
+    const attack = () => {
       if (!myTurn) return 'Not your turn';
       let x, y;
       do {
@@ -145,11 +138,11 @@ const Player = (gameboard) => {
       return gameboard.receiveAttack(x, y);
     }
   
-    function endTurn() {
+    const endTurn = () => {
       myTurn = true;
     }
   
-    function isTurn() {
+    const isTurn = () => {
       return myTurn;
     }
   
@@ -160,4 +153,11 @@ const Player = (gameboard) => {
     };
   }
   
-  module.exports = ComputerPlayer;
+  module.exports = {
+    Gameboard,
+    Player,
+    ComputerPlayer,
+    Ship
+  }
+
+  
