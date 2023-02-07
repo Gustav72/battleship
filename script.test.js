@@ -1,41 +1,47 @@
+const Player = require('./script');
+const ComputerPlayer = require('./script')
+const Gameboard = require('./script');
 const Ship = require('./script');
-const cruiser = Ship('cruiser', 3);
 
-test('properly adds length to ships', () => {
-    expect(cruiser.getLength()).toBe(3);
+describe('Ship', () => {
+
+  beforeEach(() => {
+    const cruiser = Ship('cruiser', 3);
+  });
+
+  test('properly adds length to ships', () => {
+      expect(cruiser.getLength()).toBe(3);
+  });
+
+  test('properly adds name to ships', () => {
+      expect(cruiser.getName()).toBe('cruiser');
+  });
+
+  test('properly adds hits after being hit', () => {
+      cruiser.hit();
+
+      expect(cruiser.numHits()).toBe(1);
+  });
+
+  test('ship is not sunk when length > numHits', () => {
+      expect(cruiser.isSunk()).toBe(false);
+  })
+
+  test('sinks ship after getting numHits == to length', () => {
+      cruiser.hit();
+      cruiser.hit();
+      cruiser.hit();
+
+      expect(cruiser.isSunk()).toBe(true);
+  })
+
+
+  test('recieveAttack function delivers hit to ship', () => {
+      
+      
+      expect(cruiser.numHits()).toBe(1)
+  })
 });
-
-test('properly adds name to ships', () => {
-    expect(cruiser.getName()).toBe('cruiser');
-});
-
-test('properly adds hits after being hit', () => {
-    cruiser.hit();
-
-    expect(cruiser.numHits()).toBe(1);
-});
-
-test('ship is not sunk when length > numHits', () => {
-    expect(cruiser.isSunk()).toBe(false);
-})
-
-test('sinks ship after getting numHits == to length', () => {
-    cruiser.hit();
-    cruiser.hit();
-
-    expect(cruiser.isSunk()).toBe(true);
-})
-
-const GameBoard = require('./script');
-
-
-test('recieveAttack function delivers hit to ship', () => {
-    
-    
-    expect(cruiser.numHits()).toBe(1)
-})
-
-const { Gameboard, Ship } = require('./gameboard');
 
 describe('Gameboard', () => {
   let gameboard;
@@ -77,8 +83,6 @@ describe('Gameboard', () => {
   });
 });
 
-const { Gameboard, Ship, Player } = require('./gameboard');
-
 describe('Player', () => {
   let player;
   let gameboard;
@@ -103,8 +107,6 @@ describe('Player', () => {
     expect(player.attacks[1]).toEqual([0, 0, 'hit']);
   });
 });
-
-const { Gameboard, Ship, Player, ComputerPlayer } = require('./gameboard');
 
 describe('ComputerPlayer', () => {
   let computerPlayer;
