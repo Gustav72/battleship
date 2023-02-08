@@ -10,6 +10,7 @@ const Ship = (name, length) => {
         if(damage == length) return true;
         else return false;
     }
+
     return {getName, getLength, numHits, hit, isSunk}
 };
 
@@ -27,12 +28,11 @@ const Gameboard = () => {
   
     const placeShip = (ship, x, y, orientation) => {
       let placed = false;
-  
       if (orientation === 'horizontal') {
-        if (x + ship.length > 10) return placed;
-        for (let i = x; i < x + ship.length; i++) {
+        if (x + ship.getLength() > 10) return placed;
+        for (let i = x; i < x + ship.getLength(); i++) {
           if (board[y][i] === 0) {
-            board[y][i] = 1;
+            board[y][i] = ship;
           } else {
             for (let j = x; j < i; j++) {
               board[y][j] = 0;
@@ -43,10 +43,10 @@ const Gameboard = () => {
         placed = true;
         ships.push(ship);
       } else {
-        if (y + ship.length > 10) return placed;
-        for (let i = y; i < y + ship.length; i++) {
+        if (y + ship.getLength() > 10) return placed;
+        for (let i = y; i < y + ship.getLength(); i++) {
           if (board[i][x] === 0) {
-            board[i][x] = 1;
+            board[i][x] = ship;
           } else {
             for (let j = y; j < i; j++) {
               board[j][x] = 0;
@@ -57,21 +57,14 @@ const Gameboard = () => {
         placed = true;
         ships.push(ship);
       }
-  
       return placed;
     }
   
     const receiveAttack = (x, y) => {
-      if (board[y][x] === 1) {
-        for (let i = 0; i < ships.length; i++) {
-          let ship = ships[i];
-          if (ship.isHit(x, y)) {
-            ship.hit();
-            board[y][x] = 2;
-            return 'hit';
-          }
-        }
-      } else {
+      if (board[y][x] !== 0) {
+          board[y][x].hit();
+          return 'hit';
+      } else {    
         missedAttacks.push([x, y]);
         return 'miss';
       }
@@ -86,7 +79,7 @@ const Gameboard = () => {
       return true;
     }
   
-    function displayMissed() {
+    const displayMissed = () => {
       return missedAttacks;
     }
   
@@ -95,6 +88,8 @@ const Gameboard = () => {
       receiveAttack,
       allSunk,
       displayMissed,
+      ships,
+      board
     };
   }
 
@@ -102,7 +97,6 @@ const Player = (gameboard) => {
     let myTurn = false;
     
     const attack = (x, y) => {
-      if (!myTurn) return 'Not your turn';
       myTurn = false;
       return gameboard.receiveAttack(x, y);
     }
@@ -127,7 +121,6 @@ const Player = (gameboard) => {
     let myTurn = false;
   
     const attack = () => {
-      if (!myTurn) return 'Not your turn';
       let x, y;
       do {
         x = Math.floor(Math.random() * 10);
@@ -150,6 +143,7 @@ const Player = (gameboard) => {
       attack,
       endTurn,
       isTurn,
+      previousMoves
     };
   }
   

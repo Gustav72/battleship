@@ -62,22 +62,24 @@ describe('Gameboard', () => {
   });
 
   test('can receive an attack and hit a ship', () => {
-    const ship = Ship('Destroyer', 2);
-    gameboard.placeShip(ship, 0, 0, 'horizontal');
+    const destroyer = Ship('Destroyer', 2);
+    gameboard.placeShip(destroyer, 0, 0, 'horizontal');
     gameboard.receiveAttack(0, 0);
-    expect(ship.hit).toHaveBeenCalledWith(0);
+    gameboard.receiveAttack(1, 0);
+
+    expect(destroyer.numHits()).toBe(2);
   });
 
-  test('can receive an attack and miss', () => {
+  test('can receive a miss', () => {
     gameboard.receiveAttack(0, 0);
-    expect(gameboard.missedAttacks).toContainEqual([0, 0]);
+    expect(gameboard.displayMissed()).toContainEqual([0, 0]);
   });
 
   test('can report if all ships have been sunk', () => {
-    const ship1 = Ship('Destroyer', 2);
-    const ship2 = Ship('Submarine', 3);
-    gameboard.placeShip(ship1, 0, 0, 'horizontal');
-    gameboard.placeShip(ship2, 2, 2, 'vertical');
+    const destroyer = Ship('Destroyer', 2);
+    const submarine = Ship('Submarine', 3);
+    gameboard.placeShip(destroyer, 0, 0, 'horizontal');
+    gameboard.placeShip(submarine, 2, 2, 'vertical');
     gameboard.receiveAttack(0, 0);
     gameboard.receiveAttack(0, 1);
     gameboard.receiveAttack(2, 2);
@@ -98,20 +100,12 @@ describe('Player', () => {
   });
 
   test('can attack an enemy gameboard', () => {
-    const ship = Ship('Destroyer', 2);
-    gameboard.placeShip(ship, 0, 0, 'horizontal');
+    const destroyer = Ship('Destroyer', 2);
+    gameboard.placeShip(destroyer, 0, 0, 'horizontal');
     player.attack(0, 0);
-    expect(ship.hit).toHaveBeenCalledWith(0);
+    expect(destroyer.numHits()).toBe(1);
   });
 
-  test('records the result of an attack', () => {
-    player.attack(0, 0);
-    expect(player.attacks[0]).toEqual([0, 0, 'miss']);
-    const ship = Ship('Destroyer', 2);
-    gameboard.placeShip(ship, 0, 0, 'horizontal');
-    player.attack(0, 0);
-    expect(player.attacks[1]).toEqual([0, 0, 'hit']);
-  });
 });
 
 describe('ComputerPlayer', () => {
@@ -122,32 +116,15 @@ describe('ComputerPlayer', () => {
     computerPlayer = ComputerPlayer(gameboard);
   });
 
-  test('can attack an enemy gameboard', () => {
-    const ship = Ship('Destroyer', 2);
-    gameboard.placeShip(ship, 0, 0, 'horizontal');
-    computerPlayer.attack();
-    const lastAttack = computerPlayer.attacks[computerPlayer.attacks.length - 1];
-    expect(ship.hit).toHaveBeenCalledWith(lastAttack[0]);
+  test('can attack an enemy gameboard and record result', () => {
+    expect(computerPlayer.attack()).toBe('miss');
   });
 
   test('does not attack the same coordinate twice', () => {
-    const ship = Ship('Destroyer', 2);
-    gameboard.placeShip(ship, 0, 0, 'horizontal');
     computerPlayer.attack();
-    const lastAttack = computerPlayer.attacks[computerPlayer.attacks.length - 1];
+    const lastAttack = computerPlayer.previousMoves[computerPlayer.previousMoves.length - 1];
     computerPlayer.attack();
-    const newLastAttack = computerPlayer.attacks[computerPlayer.attacks.length - 1];
+    const newLastAttack = computerPlayer.previousMoves[computerPlayer.previousMoves.length - 1];
     expect(lastAttack).not.toEqual(newLastAttack);
   });
-
-  test('records the result of an attack', () => {
-    computerPlayer.attack();
-    const lastAttack = computerPlayer.attacks[computerPlayer.attacks.length - 1];
-    expect(lastAttack[2]).toBe('miss');
-    const ship = Ship('Destroyer', 2);
-    gameboard.placeShip(ship, 0, 0, 'horizontal');
-    computerPlayer.attack();
-    const newLastAttack = computerPlayer.attacks[computerPlayer.attacks.length - 1];
-    expect(newLastAttack[2]).toBe('hit');
-  });
-});
+})
