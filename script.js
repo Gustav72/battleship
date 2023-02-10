@@ -79,6 +79,7 @@ const Gameboard = () => {
           return false;
         }
       }
+      
       return true;
     }
   
@@ -96,26 +97,13 @@ const Gameboard = () => {
     };
   }
 
-const Player = (gameboard) => {
-    let myTurn = false;
-    
+const Player = (gameboard) => {     
     const attack = (x, y) => {
-      myTurn = false;
       return gameboard.receiveAttack(x, y);
     }
     
-    const endTurn = () => {
-      myTurn = true;
-    }
-    
-    const isTurn = () => {
-      return myTurn;
-    }
-    
     return {
-      attack,
-      endTurn,
-      isTurn,
+      attack
     };
   }
 
@@ -143,22 +131,11 @@ const Player = (gameboard) => {
       return gameboard.receiveAttack(x, y);
     }
   
-    const endTurn = () => {
-      myTurn = true;
-    }
-  
-    const isTurn = () => {
-      return myTurn;
-    }
-  
     return {
       attack,
-      endTurn,
-      isTurn,
       previousMoves
     };
   }
-
 
   const GameFlow = () => {
 
@@ -190,10 +167,8 @@ const Player = (gameboard) => {
         computerBoard.placeShip(ship, x, y, randomOrientation);
         } while(!placement);
       });
-    
-
     }
-    
+  
     const generateBoards = () => {
       const pBoard = document.querySelector('#player-board');
       const cBoard = document.querySelector('#computer-board');
@@ -214,24 +189,29 @@ const Player = (gameboard) => {
             const grid2 = document.createElement('div');
               grid2.addEventListener('click', () => {
                 if(playerBoard.receiveAttack(i, j) == 'hit') {
-                  grid2.style.backgroundColor = 'red'
-                  computerPlayer.attack()
+                  message.innerHTML = "HIT!";
+                  grid2.style.backgroundColor = 'red'            
                 }
                 else {
                   grid2.style.backgroundColor = 'white'
-                  computerPlayer.attack()
+                  message.innerHTML = "MISS!";
                 }
+                if(computerBoard.allSunk()) {
+                  message.innerHTML = "YOU LOST! HOW COULD YOU";
+
+                }
+                if(playerBoard.allSunk()) {
+                  message.innerHTML = "YOU WIN!!!";
+                }
+                setTimeout(() => {
+                  computerPlayer.attack()
+                  }, 250);
             }, {once: true})
             grid2.classList.add('grid');
             row2.appendChild(grid2);
 
         }
      }  
-     
-     
-
-
-
     }
     return {
       generateBoards,
@@ -239,7 +219,7 @@ const Player = (gameboard) => {
 
     }
   }
-  
+  const message = document.getElementById('results')
 
   const playerBoard = Gameboard();
   const computerBoard = Gameboard();
@@ -252,7 +232,6 @@ const Player = (gameboard) => {
   gameFlow.generateBoards();
   
   gameFlow.startGame();
-  let turn = false
 
 //For Jest Unit Tests
 
